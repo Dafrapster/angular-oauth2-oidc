@@ -1,10 +1,10 @@
 /**
- * Additional options that can be passt to tryLogin.
+ * Additional options that can be passed to tryLogin.
  */
 export class LoginOptions {
 
     /**
-     * Is called, after a token has been received and
+     * Is called after a token has been received and
      * successfully validated.
      *
      * Deprecated:  Use property ``events`` on OAuthService instead.
@@ -12,14 +12,14 @@ export class LoginOptions {
     onTokenReceived?: (receivedTokens: ReceivedTokens) => void;
 
     /**
-     * Hook, to validate the received tokens.
+     * Hook to validate the received tokens.
      * Deprecated:  Use property ``tokenValidationHandler`` on OAuthService instead.
      */
     validationHandler?: (receivedTokens: ReceivedTokens) => Promise<any>;
 
     /**
      * Called when tryLogin detects that the auth server
-     * included an error message into the hash fragment.
+     * included an error message in the hash fragment.
      *
      * Deprecated:  Use property ``events`` on OAuthService instead.
      */
@@ -27,18 +27,17 @@ export class LoginOptions {
 
     /**
      * A custom hash fragment to be used instead of the
-     * actual one. This is used for silent refreshes, to
+     * actual one. This is used for silent refreshes in order to
      * pass the iframes hash fragment to this method.
     */
     customHashFragment?: string;
 
     /**
      * Set this to true to disable the oauth2 state
-     * check which is a best practice to avoid
+     * check which. This is a best practice to avoid
      * security attacks.
-     * As OIDC defines a nonce check that includes
-     * this, this can be set to true when only doing
-     * OIDC.
+     * Since this is part of the nonce check defined by OIDC
+     * and can only be set to true when OIDC is enabled.
      */
     disableOAuth2StateCheck?: boolean;
 }
@@ -46,7 +45,7 @@ export class LoginOptions {
 /**
  * Defines a simple storage that can be used for
  * storing the tokens at client side.
- * Is compatible to localStorage and sessionStorage,
+ * Is compatible with localStorage and sessionStorage,
  * but you can also create your own implementations.
  */
 export abstract class OAuthStorage {
@@ -56,8 +55,8 @@ export abstract class OAuthStorage {
 }
 
 /**
- * Represents the received tokens, the received state
- * and the parsed claims from the id-token.
+ * Represents the received tokens, the received state,
+ * and the parsed claims from the id token.
  */
 export class ReceivedTokens {
     idToken: string;
@@ -67,7 +66,7 @@ export class ReceivedTokens {
 }
 
 /**
- * Represents the parsed and validated id_token.
+ * Represents the parsed and validated id token.
  */
 export interface ParsedIdToken {
     idToken: string;
