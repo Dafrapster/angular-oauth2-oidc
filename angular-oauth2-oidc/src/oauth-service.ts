@@ -20,8 +20,7 @@ import { AuthConfig } from './auth.config';
 export class OAuthService
                 extends AuthConfig {
 
-    // extending AuthConfig ist just for LEGACY reasons
-    // to not break existing code
+    // extending AuthConfig isn't just for LEGACY reasons
 
     /**
      * The ValidationHandler used to validate received
@@ -42,7 +41,7 @@ export class OAuthService
     public discoveryDocumentLoaded$: Observable<object>;
 
     /**
-     * Informs about events, like token_received or token_expires.
+     * Informs about events like token_received or token_expires.
      * See the string enum EventType for a full list of events.
      */
     public events: Observable<OAuthEvent>;
@@ -95,7 +94,7 @@ export class OAuthService
             }
         }
         catch(e) {
-            console.error('cannot access sessionStorage. Consider setting an own storage implementation using setStorage', e);
+            console.error('cannot access sessionStorage. consider setting your own storage implementation using setStorage', e);
         }
         this.setupRefreshTimer();
 
@@ -189,12 +188,12 @@ export class OAuthService
         let issuerCheck = this.validateUrlAgainstIssuer(url);
 
         if (!httpsCheck) {
-            errors.push('https for all urls required. Also for urls received by discovery.');
+            errors.push('https for all urls is required --this also applies to urls received by discovery.');
         }
 
         if (!issuerCheck) {
-            errors.push('Every url in discovery document has to start with the issuer url.'
-                        + 'Also see property strictDiscoveryDocumentValidation.');
+            errors.push('every url in discovery document has to start with the issuer url'
+                        + ' --see property strictDiscoveryDocumentValidation.');
         }
 
         return errors;
@@ -302,8 +301,8 @@ export class OAuthService
     }
 
     /**
-     * Sets a custom storage used to store the received
-     * tokens on client side. By default, the browser's
+     * Sets a custom storage provider used to store the received
+     * tokens on client side. By default the browser's
      * sessionStorage is used.
      *
      * @param storage
@@ -335,7 +334,7 @@ export class OAuthService
             }
 
             if (!this.validateUrlForHttps(fullUrl)) {
-                reject('issuer must use Https. Also check property requireHttps.');
+                reject('issuer must use Https. see property requireHttps.');
                 return;
             }
 
@@ -472,8 +471,8 @@ export class OAuthService
      * uses it to query the userinfo endpoint in order to get information
      * about the user in question.
      *
-     * When using this, make sure that the property oidc is set to false.
-     * Otherwise stricter validations take happen that makes this operation
+     * When using this make sure that the property oidc is set to false.
+     * Otherwise stricter validations take place and this operation will
      * fail.
      *
      * @param userName
@@ -493,7 +492,7 @@ export class OAuthService
      * Loads the user profile by accessing the user info endpoint defined by OpenId Connect.
      *
      * When using this with OAuth2 password flow, make sure that the property oidc is set to false.
-     * Otherwise stricter validations take happen that makes this operation
+     * Otherwise stricter validations take place and this operation will
      * fail.
      */
     public loadUserProfile(): Promise<object> {
@@ -501,7 +500,7 @@ export class OAuthService
             throw new Error('Can not load User Profile without access_token');
         }
         if (!this.validateUrlForHttps(this.userinfoEndpoint)) {
-            throw new Error('userinfoEndpoint must use Http. Also check property requireHttps.');
+            throw new Error('userinfoEndpoint must use Http --see property requireHttps.');
         }
 
         return new Promise((resolve, reject) => {
@@ -550,7 +549,7 @@ export class OAuthService
     public fetchTokenUsingPasswordFlow(userName: string, password: string, headers: HttpHeaders = new HttpHeaders()): Promise<object> {
 
         if (!this.validateUrlForHttps(this.tokenEndpoint)) {
-            throw new Error('tokenEndpoint must use Http. Also check property requireHttps.');
+            throw new Error('tokenEndpoint must use Http --see property requireHttps.');
         }
 
         return new Promise((resolve, reject) => {
@@ -601,7 +600,7 @@ export class OAuthService
     public refreshToken(): Promise<object> {
 
         if (!this.validateUrlForHttps(this.tokenEndpoint)) {
-            throw new Error('tokenEndpoint must use Http. Also check property requireHttps.');
+            throw new Error('tokenEndpoint must use Http --see property requireHttps.');
         }
 
         return new Promise((resolve, reject) => {
@@ -686,7 +685,7 @@ export class OAuthService
 
     /**
      * Performs a silent refresh for implicit flow.
-     * Use this method to get a new tokens when/ before
+     * Use this method to get a new tokens before
      * the existing tokens expires.
      */
     public silentRefresh(params: object = {}): Promise<OAuthEvent> {
@@ -704,7 +703,7 @@ export class OAuthService
         }
         */
 
-        if (!this.validateUrlForHttps(this.loginUrl)) throw new Error('tokenEndpoint must use Https. Also check property requireHttps.');
+        if (!this.validateUrlForHttps(this.loginUrl)) throw new Error('tokenEndpoint must use Https --check property requireHttps.');
 
         if (typeof document === 'undefined') {
             throw new Error('silent refresh is not supported on this platform');
@@ -1003,7 +1002,7 @@ export class OAuthService
         this.inImplicitFlow = true;
 
         if (!this.validateUrlForHttps(this.loginUrl)) {
-            throw new Error('loginUrl must use Http. Also check property requireHttps.');
+            throw new Error('loginUrl must use Http --see property requireHttps.');
         }
 
         let addParams: object = {};
@@ -1032,8 +1031,8 @@ export class OAuthService
      *
      * @param additionalState Optinal state that is passes around.
      *  You find this state in the property ``state`` after ``tryLogin`` logged in the user.
-     * @param params Hash with additional parameter. If it is a string, it is used for the 
-     *               parameter loginHint (for the sake of compatibility with former versions)
+     * @param params Hash with additional parameter. If it is a string it is used for the 
+     *  parameter loginHint (for the sake of compatibility with former versions)
      */
     public initImplicitFlow(additionalState = '', params: string | object = ''): void {
 
@@ -1076,10 +1075,10 @@ export class OAuthService
     /**
      * Checks whether there are tokens in the hash fragment
      * as a result of the implicit flow. These tokens are
-     * parsed, validated and used to sign the user in to the
+     * parsed, validated, and used to sign the user in to the
      * current client.
      *
-     * @param options Optinal options.
+     * @param options Optinal login options.
      */
     public tryLogin(options: LoginOptions = null): Promise<void> {
 
@@ -1249,7 +1248,7 @@ export class OAuthService
 
             /*
             if (this.getKeyCount() > 1 && !header.kid) {
-                let err = 'There needs to be a kid property in the id_token header when multiple keys are defined via the property jwks';
+                let err = 'There needs to be a child property in the id_token header when multiple keys are defined via the property jwks';
                 console.warn(err);
                 return Promise.reject(err);
             }
@@ -1261,8 +1260,8 @@ export class OAuthService
                 return Promise.reject(err);
             }
 
-            /* For now, we only check whether the sub against
-             * silentRefreshSubject when sessionChecksEnabled is on
+            /* For now we only check the sub against
+             * silentRefreshSubject when sessionChecksEnabled is on.
              * We will reconsider in a later version to do this
              * in every other case too.
              */
@@ -1481,7 +1480,7 @@ export class OAuthService
 
         let logoutUrl: string;
 
-        if (!this.validateUrlForHttps(this.logoutUrl)) throw new Error('logoutUrl must use Http. Also check property requireHttps.');
+        if (!this.validateUrlForHttps(this.logoutUrl)) throw new Error('logoutUrl must use Http --see property requireHttps.');
 
         // For backward compatibility
         if (this.logoutUrl.indexOf('{{') > -1) {
